@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロフィール設定 - Futoru</title>
+    <style>
+        body { font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; background: #f4f4f9; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
+        button { width: 100%; padding: 12px; background: #ff6b6b; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>👤 プロフィール設定</h2>
+    <p>あなたの身体データを入力してください。<br>最適な増量カロリーを自動計算します。</p>
+
+    <form th:action="@{/profile}" method="post">
+        <div class="form-group">
+            <label>身長 (cm)</label>
+            <input type="number" step="0.1" name="height" th:value="${user.height}" required>
+        </div>
+        <div class="form-group">
+            <label>体重 (kg)</label>
+            <input type="number" step="0.1" name="weight" th:value="${user.weight}" required>
+        </div>
+        <div class="form-group">
+            <label>年齢</label>
+            <input type="number" name="age" th:value="${user.age}" required>
+        </div>
+        <div class="form-group">
+            <label>性別</label>
+            <select name="gender">
+                <option value="MALE" th:selected="${user.gender == 'MALE'}">男性</option>
+                <option value="FEMALE" th:selected="${user.gender == 'FEMALE'}">女性</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>普段の活動量</label>
+            <select name="activityLevel">
+                <option value="1" th:selected="${user.activityLevel == 1}">低い (デスクワーク中心)</option>
+                <option value="2" th:selected="${user.activityLevel == 2}">普通 (立ち仕事・軽い運動)</option>
+                <option value="3" th:selected="${user.activityLevel == 3}">高い (肉体労働・激しい運動)</option>
+            </select>
+        </div>
+        <button type="submit">保存して計算する</button>
+    </form>
+</div>
+</body>
+</html>

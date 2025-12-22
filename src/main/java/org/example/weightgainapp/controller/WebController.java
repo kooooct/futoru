@@ -31,8 +31,11 @@ public class WebController {
         // 2. 合計カロリーを計算
         int totalCalories = foods.stream().mapToInt(Food::getCalories).sum();
 
-        // 3. 目標カロリー (仮)
-        int targetCalories = 2500;
+        // 3. 目標カロリー
+        int targetCalories = (currentUser.getTargetCalories() != null)
+                             ? currentUser.getTargetCalories()
+                             : 2500;
+
 
         // 4. 残りカロリーを計算 (マイナスにならないようにMath.maxを使う)
         int remainingCalories = Math.max(0, targetCalories - totalCalories);
