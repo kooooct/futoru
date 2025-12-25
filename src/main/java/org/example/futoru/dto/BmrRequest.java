@@ -1,4 +1,4 @@
-package org.example.weightgainapp.dto;
+package org.example.futoru.dto;
 
 import lombok.Data;
 

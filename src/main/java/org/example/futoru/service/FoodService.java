@@ -1,10 +1,10 @@
-package org.example.weightgainapp.service;
+package org.example.futoru.service;
 
-import org.example.weightgainapp.dto.DashboardDto;
-import org.example.weightgainapp.entity.Food;
-import org.example.weightgainapp.entity.User;
-import org.example.weightgainapp.repository.FoodRepository;
-import org.example.weightgainapp.repository.UserRepository;
+import org.example.futoru.dto.DashboardDto;
+import org.example.futoru.entity.Food;
+import org.example.futoru.entity.User;
+import org.example.futoru.repository.FoodRepository;
+import org.example.futoru.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

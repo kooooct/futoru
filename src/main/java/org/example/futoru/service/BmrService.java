@@ -1,9 +1,9 @@
-package org.example.weightgainapp.service;
+package org.example.futoru.service;
 
-import org.example.weightgainapp.dto.ActivityLevel;
-import org.example.weightgainapp.dto.BmrRequest;
-import org.example.weightgainapp.dto.BmrResponse;
-import org.example.weightgainapp.dto.Gender;
+import org.example.futoru.dto.ActivityLevel;
+import org.example.futoru.dto.BmrRequest;
+import org.example.futoru.dto.BmrResponse;
+import org.example.futoru.dto.Gender;
 import org.springframework.stereotype.Service;
 
 @Service

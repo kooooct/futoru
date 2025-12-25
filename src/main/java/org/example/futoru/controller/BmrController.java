@@ -1,8 +1,8 @@
-package org.example.weightgainapp.controller;
+package org.example.futoru.controller;
 
-import org.example.weightgainapp.dto.BmrRequest;
-import org.example.weightgainapp.dto.BmrResponse;
-import org.example.weightgainapp.service.BmrService;
+import org.example.futoru.dto.BmrRequest;
+import org.example.futoru.dto.BmrResponse;
+import org.example.futoru.service.BmrService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

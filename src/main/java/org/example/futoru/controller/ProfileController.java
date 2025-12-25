@@ -1,8 +1,8 @@
-package org.example.weightgainapp.controller;
+package org.example.futoru.controller;
 
-import org.example.weightgainapp.entity.User;
-import org.example.weightgainapp.service.UserService;
-import org.example.weightgainapp.repository.UserRepository;
+import org.example.futoru.entity.User;
+import org.example.futoru.service.UserService;
+import org.example.futoru.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

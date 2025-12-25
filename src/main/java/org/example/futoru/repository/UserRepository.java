@@ -1,6 +1,6 @@
-package org.example.weightgainapp.repository;
+package org.example.futoru.repository;
 
-import org.example.weightgainapp.entity.User;
+import org.example.futoru.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

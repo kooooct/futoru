@@ -1,8 +1,6 @@
-package org.example.weightgainapp.dto;
+package org.example.futoru.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.example.weightgainapp.entity.Food;
+import org.example.futoru.entity.Food;
 import lombok.Builder;
 import lombok.Data;
 import java.util.List;

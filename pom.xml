@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.example</groupId>
-    <artifactId>weight-gain-app</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>weight-gain-app</name>
-    <description>weight-gain-app</description>
+    <artifactId>futoru</artifactId>
+    <version>0.0.1</version>
+    <name>futoru</name>
+    <description>futoru</description>
     <url/>
     <licenses>
         <license/>
@@ -71,7 +71,7 @@
     </dependencies>
 
     <build>
-        <finalName>app</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

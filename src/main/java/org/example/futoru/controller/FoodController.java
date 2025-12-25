@@ -1,7 +1,7 @@
-package org.example.weightgainapp.controller;
+package org.example.futoru.controller;
 
-import org.example.weightgainapp.entity.Food;
-import org.example.weightgainapp.repository.FoodRepository;
+import org.example.futoru.entity.Food;
+import org.example.futoru.repository.FoodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

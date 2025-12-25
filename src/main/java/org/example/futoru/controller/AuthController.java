@@ -1,6 +1,6 @@
-package org.example.weightgainapp.controller;
+package org.example.futoru.controller;
 
-import org.example.weightgainapp.service.UserService;
+import org.example.futoru.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

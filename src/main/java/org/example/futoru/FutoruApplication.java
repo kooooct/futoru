@@ -1,13 +1,13 @@
-package org.example.weightgainapp;
+package org.example.futoru;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WeightGainAppApplication {
+public class FutoruApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(WeightGainAppApplication.class, args);
+        SpringApplication.run(FutoruApplication.class, args);
     }
 
 }

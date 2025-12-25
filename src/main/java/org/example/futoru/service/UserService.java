@@ -1,7 +1,7 @@
-package org.example.weightgainapp.service;
+package org.example.futoru.service;
 
-import org.example.weightgainapp.entity.User;
-import org.example.weightgainapp.repository.UserRepository;
+import org.example.futoru.entity.User;
+import org.example.futoru.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

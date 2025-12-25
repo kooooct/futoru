@@ -1,4 +1,4 @@
-package org.example.weightgainapp.entity;
+package org.example.futoru.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package org.example.weightgainapp.controller;
+package org.example.futoru.controller;
 
-import org.example.weightgainapp.dto.DashboardDto;
-import org.example.weightgainapp.service.FoodService;
+import org.example.futoru.dto.DashboardDto;
+import org.example.futoru.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,4 +1,4 @@
-package org.example.weightgainapp.config;
+package org.example.futoru.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
