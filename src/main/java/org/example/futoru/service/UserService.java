@@ -42,7 +42,7 @@ public class UserService {
         user.setWeight(weight);
         user.setAge(age);
         user.setGender(gender);
-        user.setActivityLevel(activityLevel);
+        user.setActivityLevel(String.valueOf(activityLevel));
 
         // 3. 目標カロリーを設定する
         int targetCalories = calculateTargetCalories(height, weight, age, gender, activityLevel);

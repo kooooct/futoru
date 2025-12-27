@@ -5,6 +5,10 @@ REM  Spring Boot Application Deployment Script
 REM  Target Environment: AWS EC2 (Amazon Linux 2023)
 REM ========================================================
 
+REM このファイルをコピーし.templateを外して使用する。
+REM コメントがあるとデプロイができない問題があり解決できなかったため、
+REM コメント(REM)はすべて削除してからデプロイするようにする。
+
 REM --------------------------------------------------------
 REM  1. Configuration
 REM --------------------------------------------------------

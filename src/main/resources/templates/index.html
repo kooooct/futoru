@@ -3,67 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futoru - 増量管理</title>
+    <title>Futoru Dashboard</title>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
-        h1 { color: #333; text-align: center; }
-        .card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .form-group { margin-bottom: 10px; }
-        input { width: 100%; padding: 10px; box-sizing: border-box; margin-top: 5px; }
-        button { width: 100%; padding: 10px; background-color: #ff6b6b; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
-        .food-list { list-style: none; padding: 0; }
-        .food-item { background: white; border-bottom: 1px solid #eee; padding: 15px; display: flex; justify-content: space-between; }
-        .calories { font-weight: bold; color: #ff6b6b; }
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+        .card h3 { margin: 0; color: #666; font-size: 0.9em; }
+        .card p { margin: 10px 0 0; font-size: 1.5em; font-weight: bold; color: #333; }
+
+        .input-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .tab-btn { background: none; border: none; font-size: 1em; cursor: pointer; color: #666; font-weight: bold; }
+        .tab-btn.active { color: #007bff; border-bottom: 2px solid #007bff; }
+
+        .form-group { margin-bottom: 15px; display: flex; gap: 10px; align-items: center; }
+        input, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 1; }
+        button { background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        button.delete { background-color: #ff4d4d; padding: 4px 8px; font-size: 0.8em; }
+
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; font-weight: bold; color: #555; }
     </style>
+
+    <script>
+        function showTab(tabId) {
+            document.getElementById('form-master').style.display = tabId === 'master' ? 'block' : 'none';
+            document.getElementById('form-manual').style.display = tabId === 'manual' ? 'block' : 'none';
+
+            // タブスタイルの切り替え
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+    </script>
 </head>
 <body>
 
-<h1>💪 Futoru</h1>
-<div class="card" style="text-align: center; background: #e3f2fd;">
-    <h3>今日の摂取カロリー</h3>
-    <h2 style="color: #1565c0; font-size: 40px; margin: 10px 0;">
-        <span th:text="${totalCalories}">0</span> / <span th:text="${targetCalories}">2500</span> kcal
-    </h2>
-
-    <div style="background: #ddd; border-radius: 10px; height: 20px; width: 100%; margin: 10px 0; overflow: hidden;">
-        <div th:style="'background: #4caf50; height: 100%; width: ' + ${progress} + '%'"></div>
+<div class="header">
+    <h1>Futoru</h1>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <a href="/profile" style="text-decoration: none; color: #007bff;">プロフィール設定</a>
+        <form th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" style="background-color: #6c757d;">ログアウト</button>
+        </form>
     </div>
-
-    <p>目標まであと <strong style="color: #d32f2f; font-size: 20px;" th:text="${remainingCalories}">0</strong> kcal！</p>
 </div>
 
-<div class="card">
-    <h3>食べたものを記録</h3>
-    <form th:action="@{/add}" method="post">
-        <div class="form-group">
-            <label>メニュー名</label>
-            <input type="text" name="name" placeholder="例: 牛丼" required>
-        </div>
-        <div class="form-group">
-            <label>カロリー (kcal)</label>
-            <input type="number" name="calories" placeholder="例: 700" required>
-        </div>
-        <button type="submit">記録する</button>
-    </form>
+<div class="dashboard">
+    <div class="card">
+        <h3>目標 (Target)</h3>
+        <p><span th:text="${dashboard.targetCalories}">2500</span> kcal</p>
+    </div>
+    <div class="card">
+        <h3>摂取 (Current)</h3>
+        <p><span th:text="${dashboard.currentCalories}">0</span> kcal</p>
+    </div>
+    <div class="card">
+        <h3>残り (Remaining)</h3>
+        <p style="color: #28a745;"><span th:text="${dashboard.remainingCalories}">2500</span> kcal</p>
+    </div>
+</div>
+
+<div class="input-section">
+    <div class="tabs">
+        <button id="btn-master" class="tab-btn active" onclick="showTab('master')">リストから選択</button>
+        <button id="btn-manual" class="tab-btn" onclick="showTab('manual')">手入力</button>
+    </div>
+
+    <div id="form-master">
+        <form th:action="@{/food/add}" method="post" class="form-group">
+            <select name="foodItemId" required>
+                <option value="" disabled selected>食品を選択してください</option>
+                <option th:each="food : ${foodList}"
+                        th:value="${food.id}"
+                        th:text="${food.name} + ' (' + ${food.calories} + 'kcal / ' + ${food.unit} + ')'">
+                    白米 (534kcal / 合)
+                </option>
+            </select>
+            <input type="number" name="amount" step="0.1" value="1.0" placeholder="量" style="max-width: 80px;" required>
+            <button type="submit">記録する</button>
+        </form>
+        <small style="color: #666;">※ リストにない場合は「手入力」タブを使ってください。</small>
+    </div>
+
+    <div id="form-manual" style="display: none;">
+        <form th:action="@{/food/manual}" method="post" class="form-group">
+            <input type="text" name="name" placeholder="食品名 (例: コンビニ弁当)" required>
+            <input type="number" name="calories" placeholder="kcal" required>
+            <button type="submit">記録する</button>
+        </form>
+    </div>
 </div>
 
 <h3>今日の食事履歴</h3>
-<ul class="food-list">
-    <li th:each="food : ${foods}" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-    <span>
-        <span th:text="${#temporals.format(food.eatenAt, 'MM/dd HH:mm')}" style="color: gray; font-size: 0.9em; margin-right: 10px;"></span>
-        <span th:text="${food.name}"></span>
-    </span>
-        <span>
-        <strong th:text="${food.calories} + 'kcal'"></strong>
-
-        <form th:action="@{/delete}" method="post" style="display: inline; margin-left: 10px;">
-            <input type="hidden" name="id" th:value="${food.id}">
-            <button type="submit" style="background: none; border: none; color: red; cursor: pointer; font-weight: bold;">[x]</button>
-        </form>
-    </span>
-    </li>
-</ul>
+<table>
+    <thead>
+    <tr>
+        <th>時間</th>
+        <th>食品名</th>
+        <th>量</th>
+        <th>カロリー</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${history.empty}">
+        <td colspan="5" style="text-align: center; color: #999;">まだ記録がありません。</td>
+    </tr>
+    <tr th:each="log : ${history}">
+        <td th:text="${#temporals.format(log.eatenAt, 'HH:mm')}">12:30</td>
+        <td th:text="${log.name}">白米</td>
+        <td>
+            <span th:text="${log.amount}">1.0</span>
+            <span th:if="${log.foodItem != null}" th:text="${log.foodItem.unit}">合</span>
+        </td>
+        <td th:text="${log.calories} + ' kcal'">500 kcal</td>
+        <td>
+            <form th:action="@{/food/delete/{id}(id=${log.id})}" method="post">
+                <button type="submit" class="delete">削除</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>

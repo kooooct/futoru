@@ -1,16 +1,15 @@
 package org.example.futoru.dto;
 
-import org.example.futoru.entity.Food;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.util.List;
 
+/**
+ * ダッシュボード画面に表示するカロリー情報をまとめたデータクラス。
+ */
 @Data
-@Builder
+@AllArgsConstructor
 public class DashboardDto {
-    private List<Food> foods;
-    private Integer totalCalories;
-    private Integer targetCalories;
-    private Integer remainingCalories;
-    private Integer progress;
+    private int targetCalories;    // 目標カロリー
+    private int currentCalories;   // 現在の摂取カロリー
+    private int remainingCalories; // あと何kcal食べるべきか
 }
