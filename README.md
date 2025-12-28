@@ -1,11 +1,17 @@
-# Futoru (フトル) - 健康的増量支援アプリ
+# Futoru (フトル) - 増量支援アプリ
 
 ![Java](https://img.shields.io/badge/Java-21-007396?style=flat-square&logo=java&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.1-6DB33F?style=flat-square&logo=springboot&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=flat-square&logo=spring-security&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=flat-square&logo=mysql&logoColor=white)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=flat-square&logo=thymeleaf&logoColor=white)
+<br>
 ![AWS](https://img.shields.io/badge/AWS-EC2-232F3E?style=flat-square&logo=amazon-aws&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-009639?style=flat-square&logo=nginx&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=flat-square&logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 
-### デモサイト（稼働中）
+### デモサイト
 **https://futoru-app.duckdns.org**  
 AWS EC2 + Nginx + Docker 構成で常時SSL化しています。  
 ※ 現在開発中のため、機能やUIは順次アップデートされます。
