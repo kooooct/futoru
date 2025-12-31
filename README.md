@@ -13,7 +13,7 @@
 
 ### デモサイト
 **https://futoru-app.duckdns.org**  
-AWS EC2 + Nginx + Docker 構成で常時SSL化しています。  
+AWS EC2 + Nginx + Systemd 構成で常時SSL化しています。  
 ※ 現在開発中のため、機能やUIは順次アップデートされます。
 
 ---
