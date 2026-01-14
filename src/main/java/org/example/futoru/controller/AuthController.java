@@ -4,6 +4,7 @@ import org.example.futoru.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,10 @@ public class AuthController {
      * @return 登録画面テンプレート名 ("register")
      */
     @GetMapping("/register")
-    public String showRegisterForm() {
+    public String showRegisterForm(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails != null) {
+            return "redirect:/";
+        }
         return "register";
     }
 
@@ -71,7 +75,10 @@ public class AuthController {
      * @return ログイン画面テンプレート名 ("login")
      */
     @GetMapping("/login")
-    public String showLoginForm() {
+    public String showLoginForm(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails != null) {
+            return "redirect:/";
+        }
         return "login";
     }
 }
