@@ -19,12 +19,12 @@
                     <form th:action="@{/login}" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label fw-bold">ユーザID</label>
-                            <input type="text" class="form-control bg-light" id="username" name="username" placeholder="ユーザIDを入力してください" required>
+                            <input type="text" class="form-control bg-light" id="username" name="username" placeholder="ユーザIDを入力" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label fw-bold">パスワード</label>
-                            <input type="password" class="form-control bg-light" id="password" name="password" placeholder="パスワードを入力してください" required>
+                            <input type="password" class="form-control bg-light" id="password" name="password" placeholder="パスワードを入力" required>
                         </div>
 
                         <div th:if="${param.error}" class="alert alert-danger py-2 small" role="alert">
