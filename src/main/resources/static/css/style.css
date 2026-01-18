@@ -61,3 +61,24 @@ body {
     opacity: 0.7;
     cursor: default; /* クリック済み感を出す（お好みで） */
 }
+
+/* 数値入力のスピンボタン（上下矢印）を消す */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* プレースホルダーの色を薄くする */
+#weightInput::placeholder {
+    color: #e0e0e0;
+}
+
+/* 入力時の青い枠線を消す（下線演出があるため） */
+#weightInput:focus {
+    box-shadow: none;
+    outline: none;
+}

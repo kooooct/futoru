@@ -4,34 +4,49 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * レシピ（セット）作成画面から送られてくるデータを受け取るクラス。
+ * レシピ（セット）作成画面からの入力データを受け取るフォームクラス。
  * <p>
- * 複数の食材を組み合わせた「レシピ」を新規作成または編集する際に使用する。
- * 画面側から送信されるJSONデータ（レシピ名と材料リスト）にマッピングされる。
+ * 料理（DISH）または定食（MEAL_SET）の作成時に使用される。
+ * マスタデータ（既存の食材）の選択と、ユーザーによる直接入力の両方の材料情報を保持できる。
  * </p>
  */
 @Data
 public class RecipeForm {
 
-    /** レシピ名（例：「朝食セットA」） */
+    /** レシピ名（例：「自家製ハンバーグ」「ランチセットA」） */
     private String name;
 
-    /** 材料のリスト（使用する食材とその量のペア） */
+    /**
+     * 作成するアイテムの区分。
+     * <p>
+     * "DISH"（料理単品）または "MEAL_SET"（複数の料理を組み合わせたセット）のいずれかが格納される。
+     * </p>
+     */
+    private String type;
+
+    /** 構成する材料（または料理）のリスト */
     private List<IngredientDto> ingredients;
 
     /**
-     * レシピに含まれる材料1つ分のデータを表す内部クラス。
+     * 材料1つ分のデータを保持する内部クラス。
      * <p>
-     * どの食材（ID）をどれだけの量（amount）使用するかを保持する。
+     * {@code foodItemId} が存在する（非null）場合はマスタデータを参照し、
+     * 存在しない（null）場合は {@code manualName} および {@code manualCalories} を使用する。
      * </p>
      */
     @Data
     public static class IngredientDto {
 
-        /** 食材のID（FoodItemエンティティのID） */
+        /** マスタデータの食材ID（手入力の場合は null） */
         private Long foodItemId;
 
-        /** 使用量（1.0個、100gなど） */
+        /** 手入力時の材料名（マスタを使用しない場合に使用） */
+        private String manualName;
+
+        /** 手入力時のカロリー（マスタを使用しない場合に使用） */
+        private Integer manualCalories;
+
+        /** 使用量（1.0個、2.0倍など） */
         private Double amount;
     }
 }

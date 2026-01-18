@@ -11,6 +11,11 @@ import org.example.futoru.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 /**
  * レシピ（複合料理）に関するビジネスロジックを提供するサービスクラス。
  * <p>
@@ -41,42 +46,66 @@ public class RecipeService {
     @Transactional
     public void createRecipe(String username, RecipeForm form) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 1. 親となる FoodItem (例: "朝食セット") を作成
+        // 1. 親となる FoodItem を作成
         FoodItem parentFood = new FoodItem();
         parentFood.setUser(user);
         parentFood.setName(form.getName());
-        parentFood.setUnit("人前"); // レシピの単位は暫定で「人前」固定
-        parentFood.setType("DISH"); // 区分は「料理(DISH)」とする
-        parentFood.setCalories(0);  // 後で計算して更新するため、初期値は0
+        parentFood.setUnit("人前");
 
-        // IDを発行させるため、先に親データを保存する
+        // ★重要: フォームで選ばれたタイプ("DISH" or "MEAL_SET")を保存
+        // 指定がなければデフォルトで "DISH" にする安全策
+        parentFood.setType(form.getType() != null ? form.getType() : "DISH");
+
+        parentFood.setCalories(0);
         foodItemRepository.save(parentFood);
 
         int totalCalories = 0;
 
-        // 2. 材料リストをループして、Recipeテーブル（中間テーブル）に保存していく
+        // 2. 材料リストを保存
+        List<Long> ids = form.getIngredients().stream()
+                .map(RecipeForm.IngredientDto::getFoodItemId)
+                .filter(Objects::nonNull)
+                .toList();
+
+// 一括取得（1回のSQLで済む）
+        List<FoodItem> foods = foodItemRepository.findAllById(ids);
+        Map<Long, FoodItem> foodMap = foods.stream()
+                .collect(Collectors.toMap(FoodItem::getId, f -> f));
+
+// ループ処理
         for (RecipeForm.IngredientDto item : form.getIngredients()) {
-
-            // 使用する食材（Child）を検索
-            FoodItem childFood = foodItemRepository.findById(item.getFoodItemId())
-                    .orElseThrow(() -> new RuntimeException("Ingredient not found ID: " + item.getFoodItemId()));
-
-            // Recipeエンティティ（親と子の紐付け情報）を作成
             Recipe recipe = new Recipe();
-            recipe.setParentFood(parentFood); // 親：今作成しているレシピ
-            recipe.setChildFood(childFood);   // 子：材料となる食材
-            recipe.setAmount(item.getAmount());
+            recipe.setParentFood(parentFood);
+
+            // 分岐: マスタ選択か、手入力か？
+            if (item.getFoodItemId() != null) {
+                // === A. マスタ選択の場合 ===
+                FoodItem childFood = foodItemRepository.findById(item.getFoodItemId())
+                        .orElseThrow(() -> new RuntimeException("Ingredient not found"));
+
+                recipe.setChildFood(childFood);
+                recipe.setAmount(item.getAmount() != null ? item.getAmount() : 1.0);
+
+                // カロリー計算: マスタ × 量
+                totalCalories += (int) Math.round(childFood.getCalories() * recipe.getAmount());
+
+            } else {
+                // === B. 手入力の場合 ===
+                recipe.setChildFood(null);
+                recipe.setManualName(item.getManualName());
+                recipe.setManualCalories(item.getManualCalories());
+                recipe.setAmount(1.0); // 手入力は1人前固定とする
+
+                // カロリー計算: 手入力値をそのまま足す
+                totalCalories += item.getManualCalories();
+            }
 
             recipeRepository.save(recipe);
-
-            // カロリー計算: (材料のカロリー × 使用量) を加算
-            // ※必要に応じてdoubleからintへのキャストや四捨五入の精度を調整可能
-            totalCalories += (int) (childFood.getCalories() * item.getAmount());
         }
 
-        // 3. 合計カロリーが確定したので、親のFoodItemを更新して保存
+        // 3. 合計カロリー更新
         parentFood.setCalories(totalCalories);
         foodItemRepository.save(parentFood);
     }
