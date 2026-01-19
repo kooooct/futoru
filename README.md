@@ -58,8 +58,7 @@ Futoru は、体重が増えにくい人のための増量特化型食事管理�
 |:-----------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|
 |         <a href="docs/images/home.png"><img src="docs/images/home.png" width="400"></a>         | <a href="docs/images/weight-input.png"><img src="docs/images/weight-input.png" width="400"></a> |
 |                                            **食事記録**                                             |                                            **食事記録後**                                            |
-|   <a href="docs/images/meal-input.png"><img src="docs/images/meal-input.png" width="400"></a>   |     <a href="docs/images/meal-log.png"><img src="docs/images/meal-log.png" width="400"></a>     
-|
+|   <a href="docs/images/meal-input.png"><img src="docs/images/meal-input.png" width="400"></a>   |     <a href="docs/images/meal-log.png"><img src="docs/images/meal-log.png" width="400"></a>     |
 |                                            **体重管理**                                             |                                            **レシピ登録**                                            |
 |<a href="docs/images/weight-chart.png"><img src="docs/images/weight-chart.png" width="400"></a> |       <a href="docs/images/recipe.png"><img src="docs/images/recipe.png" width="400"></a>       |
 
