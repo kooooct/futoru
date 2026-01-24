@@ -89,7 +89,6 @@ jobs:
                   - DB_URL=jdbc:mysql://db:3306/futoru_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8
                   - DB_USER=user
                   - DB_PASSWORD=password
-                  - TZ: Asia/Tokyo
                 depends_on:
                   - db
                 networks:
@@ -122,8 +121,7 @@ jobs:
             
             # コンテナ再起動
             docker compose pull
-            docker compose down --remove-orphans
-            docker compose up -d
+            docker compose up -d --remove-orphans
             
             docker image prune -f
             
