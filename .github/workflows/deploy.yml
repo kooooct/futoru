@@ -65,6 +65,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            # 変数定義
             IMAGE_TAG="ghcr.io/${{ env.OWNER_LC }}/futoru-backend:latest"
             DEPLOY_DIR="/home/${{ secrets.EC2_USER }}/futoru-docker"
             
@@ -88,6 +89,7 @@ jobs:
                   - DB_URL=jdbc:mysql://db:3306/futoru_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8
                   - DB_USER=user
                   - DB_PASSWORD=password
+                  - TZ: Asia/Tokyo
                 depends_on:
                   - db
                 networks:
