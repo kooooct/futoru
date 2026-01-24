@@ -1,6 +1,5 @@
 name: Deploy Docker App to EC2
 
-# トリガー: mainブランチへのプッシュ時に実行
 on:
   push:
     branches:
@@ -10,7 +9,6 @@ on:
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
-# GITHUB_TOKENの権限設定 (GHCRへのパッケージ書き込みに必要)
 permissions:
   contents: read
   packages: write
@@ -20,11 +18,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. リポジトリのチェックアウト
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. JDK 21 (Amazon Corretto) のセットアップ
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -33,12 +29,14 @@ jobs:
           cache: 'maven'
           cache-dependency-path: 'backend/pom.xml'
 
-      # 3. Mavenビルド (テストはスキップ)
+      # Windows環境からのpushで権限が切れることがあるため付与
+      - name: Grant execute permission for mvnw
+        run: chmod +x backend/mvnw
+
       - name: Build with Maven
         working-directory: ./backend
         run: ./mvnw clean package -DskipTests
 
-      # 4. GitHub Container Registry へのログイン
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -46,14 +44,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 5. Dockerタグ用の環境変数設定 (オーナー名を小文字に変換)
       - name: Convert owner to lowercase
         run: |
           echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
         env:
           OWNER: '${{ github.repository_owner }}'
 
-      # 6. Dockerイメージのビルドとプッシュ
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -62,7 +58,6 @@ jobs:
           push: true
           tags: ghcr.io/${{ env.OWNER_LC }}/futoru-backend:latest
 
-      # 7. SSH接続によるリモートデプロイ実行
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -70,31 +65,29 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # 変数定義
             IMAGE_TAG="ghcr.io/${{ env.OWNER_LC }}/futoru-backend:latest"
             DEPLOY_DIR="/home/${{ secrets.EC2_USER }}/futoru-docker"
             
-            # リモートホスト側でのレジストリログイン
+            # レジストリログイン
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             
-            # デプロイ用ディレクトリの作成
             mkdir -p $DEPLOY_DIR
             cd $DEPLOY_DIR
             
-            # docker-compose.yml の生成
+            # docker-compose.yml 生成
             cat <<EOF > docker-compose.yml
             services:
-              app:
+              backend:
                 image: $IMAGE_TAG
                 container_name: futoru-backend
                 ports:
                   - "8080:8080"
                 environment:
                   - JAVA_TOOL_OPTIONS=-Xmx300m
+                  - TZ=Asia/Tokyo
                   - DB_URL=jdbc:mysql://db:3306/futoru_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8
                   - DB_USER=user
                   - DB_PASSWORD=password
-                  - TZ: Asia/Tokyo
                 depends_on:
                   - db
                 networks:
@@ -125,11 +118,11 @@ jobs:
               db_data:
             EOF
             
-            # コンテナのプルと再起動 (バックグラウンド実行)
+            # コンテナ再起動
             docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose down --remove-orphans
+            docker compose up -d
             
-            # 未使用イメージの削除 (ディスク容量節約)
             docker image prune -f
             
-            echo "Deployment completed successfully."
+            echo "Backend deployment completed successfully."
