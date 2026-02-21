@@ -13,12 +13,12 @@
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 
 ### サービスURL
-**https://futoru-app.duckdns.org**  
+~~https://futoru-app.duckdns.org~~  
 AWS EC2 上でDocker Composeを用いてコンテナ運用しています。  
 GitHub Actionsによる CI/CD パイプラインを構築しており、mainブランチへのプッシュで自動デプロイされます。  
 （Nginx + Let's Encrypt により常時SSL化済み）
 
-※ 現在開発中のため、機能やUIは順次アップデートされます。
+※ 現在は外部からはアクセスできないようになってます。
 
 
 ## 目次
