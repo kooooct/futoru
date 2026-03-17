@@ -1,4 +1,4 @@
-name: Deploy Docker App to EC2
+name: Deploy Docker App to OCI
 
 on:
   push:
@@ -29,7 +29,6 @@ jobs:
           cache: 'maven'
           cache-dependency-path: 'backend/pom.xml'
 
-      # Windows環境からのpushで権限が切れることがあるため付与
       - name: Grant execute permission for mvnw
         run: chmod +x backend/mvnw
 
@@ -65,16 +64,16 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Deploy to EC2 via SSH
+      - name: Deploy to OCI via SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.OCI_SSH_KEY }}
           script: |
-            # 変数定義
+            # 変数定義（ユーザー名を opc に変更）
             IMAGE_TAG="ghcr.io/${{ env.OWNER_LC }}/futoru-backend:latest"
-            DEPLOY_DIR="/home/${{ secrets.EC2_USER }}/futoru-docker"
+            DEPLOY_DIR="/home/${{ secrets.OCI_USER }}/futoru-docker"
             
             # レジストリログイン
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -82,14 +81,12 @@ jobs:
             mkdir -p $DEPLOY_DIR
             cd $DEPLOY_DIR
             
-            # docker-compose.yml 生成
+            # 🛡️ docker-compose.yml 生成 (ポート全閉じ ＆ 共通ネットワーク版)
             cat <<EOF > docker-compose.yml
             services:
               backend:
                 image: $IMAGE_TAG
                 container_name: futoru-backend
-                ports:
-                  - "8080:8080"
                 environment:
                   - JAVA_TOOL_OPTIONS=-Xmx300m
                   - TZ=Asia/Tokyo
@@ -99,7 +96,7 @@ jobs:
                 depends_on:
                   - db
                 networks:
-                  - futoru-network
+                  - web-network
             
               db:
                 image: mysql:8.0
@@ -110,17 +107,15 @@ jobs:
                   MYSQL_PASSWORD: password
                   MYSQL_ROOT_PASSWORD: root_password
                   TZ: Asia/Tokyo
-                ports:
-                  - "3306:3306"
                 command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --performance_schema=OFF --innodb_buffer_pool_size=128M
                 volumes:
                   - db_data:/var/lib/mysql
                 networks:
-                  - futoru-network
+                  - web-network
             
             networks:
-              futoru-network:
-                driver: bridge
+              web-network:
+                external: true
             
             volumes:
               db_data:
