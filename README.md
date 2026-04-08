@@ -213,5 +213,5 @@ docker compose logs -f
 ### 3. 終了の仕方
 コンテナを落とす場合は以下のコマンドを実行します。
 ```bash
-docker compose down
+docker compose docker-compose.local.yml down
 ```
